@@ -1,0 +1,7 @@
+# Fine-tuning: ImageNet -> CIFAR-100 (MobileNetV3 Large)
+epochs: 20
+lr: 0.0005
+momentum: 0.9
+weight_decay: 0.0001
+freeze_backbone: true
+batch_size: 128

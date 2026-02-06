@@ -1,0 +1,7 @@
+# Fine-tuning: ImageNet -> CIFAR-10 (ResNet18)
+epochs: 5
+lr: 0.001
+momentum: 0.9
+weight_decay: 0.0001
+freeze_backbone: true
+batch_size: 128

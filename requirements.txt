@@ -4,3 +4,5 @@ hydra-core
 pandas
 tqdm
 pillow
+ipykernel
+matplotlib-venn

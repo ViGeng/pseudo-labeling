@@ -1,0 +1,8 @@
+# Fine-tuning: ImageNet -> CIFAR-10 (MobileNetV3 Large)
+# MobileNet might benefit from slightly longer training or lower LR
+epochs: 10
+lr: 0.0005
+momentum: 0.9
+weight_decay: 0.00004 # Less weight decay for smaller model
+freeze_backbone: true
+batch_size: 128

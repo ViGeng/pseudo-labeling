@@ -1,0 +1,8 @@
+# Fine-tuning: ImageNet -> CIFAR-100 (ResNet18)
+# CIFAR-100 needs more epochs
+epochs: 15
+lr: 0.001
+momentum: 0.9
+weight_decay: 0.0005
+freeze_backbone: true
+batch_size: 128
