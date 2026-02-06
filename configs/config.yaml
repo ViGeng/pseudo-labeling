@@ -12,17 +12,18 @@ hydra:
   output_subdir: null # Disable .hydra logging to keep it clean
 
 # Experiment settings
-batch_size: 256
-num_workers: 4
+batch_size: 512
+num_workers: 8
 device: "cuda"
 
 # Overrides for Matrix Experiments
 # We load the base config from defaults above (cifar10/resnet18), then override the names here.
 dataset:
-  name: "cifar10,cifar100,fashion_mnist"
-  split: "val"
+  name: "imagenette"
+  split: "train"
   root: "./data"
   download: true
+  subset: null # Integer size of subset (e.g. 100) or null for full dataset
 
 model:
   name: "resnet18,mobilenet_v3_large"

@@ -54,8 +54,20 @@ def main(cfg: DictConfig):
                 dataset = CIFAR100Wrapper(root=cfg.dataset.root, split=split, download=cfg.dataset.download)
             elif ds_name == "fashion_mnist":
                 dataset = FashionMNISTWrapper(root=cfg.dataset.root, split=split, download=cfg.dataset.download)
+            elif ds_name == "imagenette":
+                from src.datasets.wrappers import ImagenetteWrapper
+                dataset = ImagenetteWrapper(root=cfg.dataset.root, split=split, download=cfg.dataset.download)
+            elif ds_name == "imagenet":
+                from src.datasets.wrappers import ImageNetWrapper
+                dataset = ImageNetWrapper(root=cfg.dataset.root, split=split, download=cfg.dataset.download)
             else:
                 raise ValueError(f"Unknown dataset: {ds_name}")
+            
+            # --- Subsetting ---
+            if cfg.dataset.subset is not None and cfg.dataset.subset > 0:
+                print(f"Creating subset of size {cfg.dataset.subset}")
+                indices = list(range(min(len(dataset), cfg.dataset.subset)))
+                dataset = torch.utils.data.Subset(dataset, indices)
             
             dataloader = DataLoader(dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False)
             
