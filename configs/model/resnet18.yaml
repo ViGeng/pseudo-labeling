@@ -1,0 +1,2 @@
+name: resnet18
+weights: DEFAULT # Torchvision weights enum

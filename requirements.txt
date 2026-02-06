@@ -1,0 +1,6 @@
+torch
+torchvision
+hydra-core
+pandas
+tqdm
+pillow

@@ -1,0 +1,4 @@
+name: cifar100
+root: ./data
+split: val
+download: true

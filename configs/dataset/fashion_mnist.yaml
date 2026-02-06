@@ -1,0 +1,4 @@
+name: fashion_mnist
+root: ./data
+split: val
+download: true

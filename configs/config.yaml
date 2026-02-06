@@ -1,0 +1,35 @@
+defaults:
+  - _self_
+
+# Simplified output structure: outputs/dataset_name.csv
+# We set this as the Hydra run directory too, although Hydra typically wants unique dirs per run.
+# To keep it simple and single-file as requested:
+output_dir: outputs
+
+hydra:
+  run:
+    dir: .  # Don't change CWD, so we can control output path manually
+  output_subdir: null # Disable .hydra logging to keep it clean
+
+# Experiment settings
+batch_size: 256
+num_workers: 4
+device: "cuda"
+
+# Overrides for Matrix Experiments
+# We load the base config from defaults above (cifar10/resnet18), then override the names here.
+dataset:
+  name: "cifar10,cifar100,fashion_mnist"
+  split: "val"
+  root: "./data"
+  download: true
+
+model:
+  name: "resnet18,mobilenet_v3_large"
+  weights: "DEFAULT"
+
+# Analysis settings
+analysis:
+  # This matches the request: "outputs/dataset_name.csv"
+  output_csv: "${output_dir}/${dataset.name}.csv"
+  save_logits: false

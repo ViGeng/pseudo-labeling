@@ -1,0 +1,4 @@
+name: cifar10
+root: ./data
+split: val # or test/train
+download: true
