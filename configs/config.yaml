@@ -19,7 +19,7 @@ device: "cuda"
 # Overrides for Matrix Experiments
 # We load the base config from defaults above (cifar10/resnet18), then override the names here.
 dataset:
-  name: "imagenette"
+  name: "imagenette, cifar10, cifar100"
   split: "val"
   root: "./data"
   download: true

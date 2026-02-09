@@ -85,9 +85,53 @@ def main(cfg: DictConfig):
                 print(f"Loading Model: {model_name}")
                 
                 # 2. Setup Model
-                # We assume shared weights param (e.g. DEFAULT)
-                model = load_model(name=model_name, weights_enum=cfg.model.weights)
+                # Load model-specific config to get weights and source dataset
+                # Try to find a config file for the model
+                model_cfg_path = os.path.join(hydra.utils.get_original_cwd(), "configs", "model", f"{model_name}.yaml")
+                # Handle case where model name in loop might not perfectly match file, 
+                # but here we assume strict naming or existing mapping.
+                # For 'mobilenet_v3_large', the file is 'mobilenet_v3.yaml' based on previous ls.
+                # We need a fallback or a way to map names.
+                # The user's config loop uses "mobilenet_v3_large". 
+                # I see 'mobilenet_v3.yaml' has 'name: mobilenet_v3_large' inside it.
+                # Let's try to map or just try standard name.
                 
+                # Simple mapping for known deviation
+                fname = model_name
+                if model_name == "mobilenet_v3_large":
+                    fname = "mobilenet_v3"
+                    
+                model_cfg_path = os.path.join(hydra.utils.get_original_cwd(), "configs", "model", f"{fname}.yaml")
+                
+                if os.path.exists(model_cfg_path):
+                    model_cfg = OmegaConf.load(model_cfg_path)
+                    weights = model_cfg.get("weights", "DEFAULT")
+                    model_source = model_cfg.get("source_dataset", "imagenet1k")
+                    print(f"Loaded config for {model_name} from {fname}.yaml")
+                else:
+                    print(f"[WARNING] No config found for {model_name}, using defaults.")
+                    weights = "DEFAULT"
+                    model_source = "imagenet1k"
+
+                model = load_model(name=model_name, weights_enum=weights)
+                
+                # --- Label Mapping Setup ---
+                target_dataset = ds_name
+                target_dataset = ds_name
+                
+                label_mapper = None
+                if model_source != target_dataset:
+                    # Construct potential mapping file path: configs/mappings/{source}_to_{target}.json
+                    mapping_filename = f"{model_source}_to_{target_dataset}.json"
+                    mapping_path = os.path.join(hydra.utils.get_original_cwd(), "configs", "mappings", mapping_filename)
+                    
+                    if os.path.exists(mapping_path):
+                        print(f"Loading label mapping: {mapping_filename}")
+                        from src.utils.label_mapper import LabelMapper
+                        label_mapper = LabelMapper(mapping_path)
+                    else:
+                        print(f"[WARNING] No mapping found for {model_source} -> {target_dataset}. Predictions will remain in {model_source} label space.")
+
                 # 3. Setup Runner
                 # Note: 'a' mode (append) in runner allows multiple models to write to same file
                 runner = InferenceRunner(
@@ -96,7 +140,8 @@ def main(cfg: DictConfig):
                     device=cfg.device,
                     output_csv=output_csv_path,
                     model_name=model_name,
-                    save_logits=cfg.analysis.save_logits
+                    save_logits=cfg.analysis.save_logits,
+                    label_mapper=label_mapper
                 )
                 
                 # 4. Run

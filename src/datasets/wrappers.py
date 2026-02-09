@@ -72,26 +72,14 @@ class ImagenetteWrapper(BaseDataset):
         ]))
 
         # Mapping from Imagenette class index (0-9) to ImageNet class index (0-999)
-        # Order: tench, English springer, cassette player, chain saw, church, 
-        # French horn, garbage truck, gas pump, golf ball, parachute
-        self.imagenet_mapping = {
-            0: 0,   # tench
-            1: 217, # English springer
-            2: 482, # cassette player
-            3: 491, # chain saw
-            4: 497, # church
-            5: 566, # French horn
-            6: 569, # garbage truck
-            7: 571, # gas pump
-            8: 574, # golf ball
-            9: 701  # parachute
-        }
+        # REMOVED: Mapping is now handled externally via LabelMapper.
+        # Original mapping was: tench(0)->0, English springer(1)->217, etc.
 
     def __getitem__(self, index: int) -> Tuple[str, Any, Any]:
         img, target = self.dataset[index]
         
-        # Map target to original ImageNet index
-        target = self.imagenet_mapping.get(target, target)
+        # We return the original Imagenette target (0-9).
+        # Mapping to other label spaces (like ImageNet 0-999) is handled by the runner/mapper.
         
         # Imagenette doesn't easily expose filenames in simple API (unlike ImageFolder), 
         # so we'll generate a deterministic ID.

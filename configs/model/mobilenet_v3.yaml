@@ -1,2 +1,3 @@
 name: mobilenet_v3_large
 weights: DEFAULT
+source_dataset: imagenet1k

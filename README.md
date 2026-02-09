@@ -32,6 +32,14 @@ cifar10_test_0,776,0.2668,3
 ...
 ```
 - `sample_id`: Unique identifier for the sample.
-- `prediction`: The class index predicted by the model.
+- `prediction`: The class index predicted by the model (mapped to target dataset space if applicable).
 - `confidence`: The probability/confidence score of the prediction.
 - `ground_truth`: The actual class label.
+
+## Label Mapping
+
+To handle label discrepancies (e.g., ImageNet model on CIFAR10), the system automatically maps equivalent classes using JSON files in `configs/mappings/`.
+
+- **Model Config**: Models define their `source_dataset` (e.g., `imagenet1k`).
+- **Logic**: If `source != target`, predictions are mapped. Unmapped classes become `-1`.
+- **Supported Mappings**: ImageNet1k -> Imagenette, CIFAR10 (208 classes), CIFAR100 (131 classes).

@@ -7,15 +7,20 @@ import os
 import json
 
 from ..models.adapters import ClassificationAdapter
+# No circular import, as LabelMapper is in utils. 
+# We can use forward reference or just 'object'/'Any' if strictly typing isn't enforced, 
+# or import if available. Let's use Any to be safe or import if we are sure.
+from ..utils.label_mapper import LabelMapper
 
 class InferenceRunner:
-    def __init__(self, model: ClassificationAdapter, dataloader: DataLoader, device: str, output_csv: str, model_name: str, save_logits: bool = False):
+    def __init__(self, model: ClassificationAdapter, dataloader: DataLoader, device: str, output_csv: str, model_name: str, save_logits: bool = False, label_mapper: Optional[LabelMapper] = None):
         self.model = model
         self.dataloader = dataloader
         self.device = device
         self.output_csv = output_csv
         self.model_name = model_name
         self.save_logits = save_logits
+        self.label_mapper = label_mapper
         
         self.model.to(self.device)
 
@@ -48,6 +53,10 @@ class InferenceRunner:
                 preds = outputs['predictions'].cpu().numpy()
                 confs = outputs['confidences'].cpu().numpy()
                 targets = targets.numpy()
+                
+                # Apply label mapping if provided
+                if self.label_mapper:
+                    preds = self.label_mapper.map(preds)
                 
                 # Iterate through batch and write rows
                 for i in range(len(sample_ids)):
