@@ -72,24 +72,15 @@ def main(cfg: DictConfig):
             dataloader = DataLoader(dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False)
             
             # Construct output path specific to dataset and split
-            # e.g. "outputs/cifar10_val.csv"
-            # We use the config-defined 'output_csv' as a template if possible, or force our scheme.
-            # Using the schema requested: "outputs/dataset_name.csv", but user asked for "cifar10_val.csv"
-            # let's construct it manually to be safe and support the feature.
             output_dir = cfg.output_dir
-            output_csv_path = f"{output_dir}/{ds_name}_{split}.csv"
 
             for model_name in model_names:
-                # Check for skip
+                # Construct output path using [dataset_name]-[model name]-[split].csv
+                output_csv_path = f"{output_dir}/{ds_name}-{model_name}-{split}.csv"
+
                 if os.path.exists(output_csv_path):
-                    try:
-                        # Only read specific columns to check model_id presence quickly
-                        existing_df = pd.read_csv(output_csv_path, usecols=['model_id'])
-                        if model_name in existing_df['model_id'].unique():
-                            print(f"[SKIP] {model_name} already exists in {output_csv_path}")
-                            continue
-                    except Exception as e:
-                        print(f"[WARN] Failed to check for existing results: {e}")
+                    print(f"[SKIP] Output file already exists: {output_csv_path}")
+                    continue
 
                 print(f"Loading Model: {model_name}")
                 

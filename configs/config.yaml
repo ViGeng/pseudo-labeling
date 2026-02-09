@@ -20,7 +20,7 @@ device: "cuda"
 # We load the base config from defaults above (cifar10/resnet18), then override the names here.
 dataset:
   name: "imagenette"
-  split: "train"
+  split: "val"
   root: "./data"
   download: true
   subset: null # Integer size of subset (e.g. 100) or null for full dataset

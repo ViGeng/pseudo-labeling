@@ -31,7 +31,7 @@ class InferenceRunner:
         with open(self.output_csv, 'a') as f:
             if not file_exists:
                 # Write header
-                header = "sample_id,model_id,prediction,confidence"
+                header = "sample_id,prediction,confidence"
                 if self.save_logits:
                     header += ",logits"
                 header += ",ground_truth\n"
@@ -52,7 +52,6 @@ class InferenceRunner:
                 # Iterate through batch and write rows
                 for i in range(len(sample_ids)):
                     row = f"{sample_ids[i]}," \
-                          f"{self.model_name}," \
                           f"{preds[i]}," \
                           f"{confs[i]:.4f},"
 
