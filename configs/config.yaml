@@ -16,21 +16,26 @@ batch_size: 512
 num_workers: 8
 device: "cuda"
 
-# Overrides for Matrix Experiments
-# We load the base config from defaults above (cifar10/resnet18), then override the names here.
-dataset:
-  name: "imagenette, cifar10, cifar100"
-  split: "val"
-  root: "./data"
-  download: true
-  subset: null # Integer size of subset (e.g. 100) or null for full dataset
+# Pair-wise execution configuration
+pairs:
+  - dataset: cifar10
+    model: resnet18
+    split: val
+  - dataset: cifar100
+    model: resnet18
+    split: val
+  - dataset: imagenette
+    model: mobilenet_v3_large
+    split: val
 
-model:
-  name: "resnet18,mobilenet_v3_large"
-  weights: "DEFAULT"
+# Shared defaults can be overridden in pairs if needed, but here are the common settings.
+dataset_root: "./data"
+subset: null # Integer size of subset (e.g. 100) or null for full dataset
+save_logits: false
+
+
 
 # Analysis settings
 analysis:
-  # This matches the request: "outputs/dataset_name.csv"
-  output_csv: "${output_dir}/${dataset.name}.csv"
+  # Output path is constructed in main.py as {output_dir}/{dataset}-{model}-{split}.csv
   save_logits: false

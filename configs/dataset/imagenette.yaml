@@ -1,0 +1,4 @@
+name: imagenette
+root: ./data
+split: val
+download: true

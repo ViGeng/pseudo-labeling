@@ -1,0 +1,4 @@
+name: imagenet
+root: ./data
+split: val
+download: false
