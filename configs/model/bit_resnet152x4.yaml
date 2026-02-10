@@ -1,0 +1,41 @@
+# =============================================================================
+# BiT-M ResNet-152x4 (Big Transfer)
+# =============================================================================
+# Brief: Large-scale pre-trained ResNet from Google. "BiT" models are trained
+#        on larger datasets (ImageNet-21K) with careful training recipes.
+#        152x4 means 152 layers with 4x channel width multiplier.
+#
+# Architecture:
+#   - Base: ResNet-152
+#   - Width multiplier: 4x (quadruple channels at each stage)
+#   - Group Normalization instead of BatchNorm
+#   - Weight Standardization in convolutions
+#   - Parameters: ~936M
+#
+# Input: 224x224 or higher resolution RGB images
+# Output: 21,843 classes (ImageNet-21K) or fine-tuned heads
+#
+# Bias Profile: General high-capacity
+#   - Massive capacity for learning complex features
+#   - Pre-trained on ImageNet-21K (21K classes)
+#   - May overfit to common patterns, miss niche domains
+#
+# Use Case (Cloud Model):
+#   - "Specialist vs. Generalist" experiments
+#   - High-capacity baseline (paired with small specialized Edge)
+#   - General knowledge, but may lack domain-specific adaptation
+#
+# Note: Requires 'timm' package for loading
+#
+# Weights: timm/resnetv2_152x4_bit.goog_in21k
+# =============================================================================
+
+name: bit_resnet152x4
+weights: goog_in21k
+source_dataset: imagenet21k
+source: timm
+
+# Model category
+role: cloud
+bias_type: general
+model_family: resnet

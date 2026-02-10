@@ -1,0 +1,31 @@
+# =============================================================================
+# Tiny ImageNet
+# =============================================================================
+# Brief: Subset of ImageNet with 200 classes, resized to 64x64 pixels.
+#        Popular for fast prototyping and educational purposes.
+#
+# Labels: 200 classes (subset of ImageNet-1K classes)
+# Scale: 110,000 images (100K train + 10K val)
+# Domain: Natural images resized to 64x64
+#
+# Use Case:
+#   - Base dataset for Tiny-ImageNet-C
+#   - Quick iteration compared to full ImageNet
+#   - Tests model capacity on compact representation
+#
+# Download Instructions:
+#   1. Download from: http://cs231n.stanford.edu/tiny-imagenet-200.zip
+#   2. Extract to: ./data/tiny-imagenet-200/
+#   3. Structure: ./data/tiny-imagenet-200/train/<class>/images/...
+#                 ./data/tiny-imagenet-200/val/images/...
+#                 ./data/tiny-imagenet-200/val/val_annotations.txt
+#
+# Note: val folder has flat structure with annotations file
+#
+# Auto-download: Yes (Stanford CS231N, ~237MB)
+# =============================================================================
+
+name: tiny_imagenet
+root: ./data/tiny-imagenet-200
+split: val
+download: true

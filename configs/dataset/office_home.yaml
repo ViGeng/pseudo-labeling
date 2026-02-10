@@ -1,0 +1,40 @@
+# =============================================================================
+# Office-Home Dataset
+# =============================================================================
+# Brief: Domain adaptation benchmark with 4 visually distinct domains.
+#        Each domain contains 65 object categories from office/home environments.
+#
+# Labels: 65 classes (office/home objects like Alarm_Clock, Backpack, etc.)
+# Scale: ~15,500 images total (~4K per domain)
+# Domains: Art, Clipart, Product, Real_World
+#
+# Use Case:
+#   - "Specialist vs. Generalist" gap testing
+#   - Edge model (domain-specialized) outperforms on target domain
+#   - Cloud model (general zero-shot) struggles with domain-specific styles
+#   - Tests domain shift robustness
+#
+# Download Instructions:
+#   1. Download from: https://www.hemanthdv.org/officeHomeDataset.html
+#      Direct link: Request access or use Kaggle mirror
+#   2. Extract to: ./data/office-home/
+#   3. Structure: ./data/office-home/<domain>/<class>/<images>
+#      Example: ./data/office-home/Art/Alarm_Clock/00001.jpg
+#
+# Domain Descriptions:
+#   - Art: Artistic renderings (paintings, sketches, artistic depictions)
+#   - Clipart: Clipart images (simplified, cartoon-style graphics)
+#   - Product: Product catalog images (white background, studio photos)
+#   - Real_World: Real-world photos (natural settings, varied lighting)
+# Note: Download requires registration. Google Drive link may have quota limits.
+#
+# Auto-download: No (requires manual registration and download)
+# =============================================================================
+
+name: office_home
+root: ./data/office-home
+split: val  # not standard split; use domain for selection
+download: false
+
+# Domain selection (choose one)
+domain: Real_World  # Art, Clipart, Product, Real_World

@@ -6,3 +6,10 @@ tqdm
 pillow
 ipykernel
 matplotlib-venn
+numpy
+
+
+# Optional: for additional models (timm, open_clip)
+timm           # For BiT models (ResNet-152x4) and other advanced architectures
+open_clip_torch  # For CLIP models (ViT-L/14)
+datasets       # For Hugging Face datasets (OfficeHome, etc.)

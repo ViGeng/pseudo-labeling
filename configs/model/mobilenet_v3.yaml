@@ -1,3 +1,15 @@
+# =============================================================================
+# MobileNetV3 Large
+# =============================================================================
+# Brief: Efficient mobile-optimized CNN using inverted residuals and
+#        squeeze-excitation blocks. Strong accuracy for edge deployment.
+#
+# Parameters: ~5.4M
+# Bias: Texture-biased (CNN)
+# Role: Edge model (mobile deployment)
+# =============================================================================
+
 name: mobilenet_v3_large
 weights: DEFAULT
 source_dataset: imagenet1k
+source: torchvision

@@ -1,0 +1,37 @@
+# =============================================================================
+# Tiny-ImageNet-C (Corrupted Tiny ImageNet)
+# =============================================================================
+# Brief: Tiny ImageNet validation set with corruptions applied, following
+#        the same corruption protocol as ImageNet-C but on 64x64 images.
+#
+# Labels: 200 classes (same as Tiny ImageNet)
+# Scale: ~10,000 images per corruption type
+# Domain: Small natural images (64x64) with synthetic corruptions
+#
+# Use Case:
+#   - "Robustness Trap" (AugMix) testing at medium scale
+#   - Faster than ImageNet-C, more complex than CIFAR-100-C
+#   - Edge model (robust-trained) vs Cloud model (standard-trained)
+#
+# Download Instructions:
+#   1. Download from: https://zenodo.org/records/2536630
+#      or generate using: https://github.com/hendrycks/robustness
+#   2. Extract to: ./data/Tiny-ImageNet-C/
+#   3. Structure: ./data/Tiny-ImageNet-C/<corruption>/<severity>/<class>/<images>
+#
+# Corruption Types: Same 15 types as ImageNet-C
+#   gaussian_noise, shot_noise, impulse_noise, defocus_blur, glass_blur,
+#   motion_blur, zoom_blur, snow, frost, fog, brightness, contrast,
+#   elastic_transform, pixelate, jpeg_compression
+#
+# Auto-download: Yes (Zenodo, ~1.8GB)
+# =============================================================================
+
+name: tiny_imagenet_c
+root: ./data/Tiny-ImageNet-C
+split: val
+download: true
+
+# Corruption settings
+corruption_type: gaussian_noise
+severity: 3  # 1-5

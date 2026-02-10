@@ -1,0 +1,33 @@
+# =============================================================================
+# Stanford Cars Dataset
+# =============================================================================
+# Brief: Fine-grained classification dataset of car models. Contains images
+#        of 196 car makes/models with annotations for bounding boxes.
+#        Challenging due to subtle inter-class differences.
+#
+# Labels: 196 classes (car makes/models/years, e.g., "Audi R8 Coupe 2012")
+# Scale: ~16,185 images (8,144 train + 8,041 test)
+# Domain: Natural car photographs from various angles
+#
+# Use Case:
+#   - "Resolution & Crop" inversion testing
+#   - Edge model with high-res crop sees distinctive features (headlights, grilles)
+#   - Cloud model with full image resized loses fine details
+#   - Tests fine-grained recognition capability
+#
+# Download Instructions:
+#   1. Download from: https://ai.stanford.edu/~jkrause/cars/car_dataset.html
+#      - Download: cars_train.tgz, cars_test.tgz, car_devkit.tgz
+#   2. Alternative: Use torchvision.datasets.StanfordCars (auto-download)
+#   3. Extract to: ./data/stanford-cars/
+#   4. Structure: ./data/stanford-cars/cars_train/<images>
+#                 ./data/stanford-cars/cars_test/<images>
+#
+# Note: Original source may be unavailable; use Kaggle mirror if needed
+#       https://www.kaggle.com/datasets/jessicali9530/stanford-cars-dataset
+# =============================================================================
+
+name: stanford_cars
+root: ./data/stanford-cars
+split: test
+download: true  # torchvision supports auto-download

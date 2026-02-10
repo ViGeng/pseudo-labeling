@@ -1,4 +1,15 @@
+# =============================================================================
+# CIFAR-10
+# =============================================================================
+# Brief: Classic image classification benchmark with 10 classes of common objects.
+#
+# Labels: 10 classes (airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck)
+# Scale: 60,000 images (50K train + 10K test)
+# Domain: Tiny natural images (32x32 RGB)
+# Download: Auto-download via torchvision
+# =============================================================================
+
 name: cifar10
 root: ./data
-split: val # or test/train
+split: val  # or test/train
 download: true

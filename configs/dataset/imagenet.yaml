@@ -1,3 +1,20 @@
+# =============================================================================
+# ImageNet (ILSVRC 2012)
+# =============================================================================
+# Brief: Large-scale image classification benchmark. The standard pre-training
+#        dataset for vision models.
+#
+# Labels: 1000 classes (diverse objects, animals, scenes)
+# Scale: ~1.28M images (~1.2M train + ~50K val)
+# Domain: Natural images (various resolutions, resized to 224x224)
+# Download: Manual download required (academic access)
+#
+# Download Instructions:
+#   1. Register at https://image-net.org/
+#   2. Download ILSVRC2012_img_train.tar and ILSVRC2012_img_val.tar
+#   3. Extract to: ./data/imagenet/train/ and ./data/imagenet/val/
+# =============================================================================
+
 name: imagenet
 root: ./data
 split: val

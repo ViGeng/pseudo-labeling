@@ -1,0 +1,39 @@
+# =============================================================================
+# ImageNet-C (Corrupted ImageNet)
+# =============================================================================
+# Brief: ImageNet validation set with 15 types of algorithmically generated 
+#        corruptions (noise, blur, weather, digital) at 5 severity levels.
+#        Designed to benchmark model robustness to common corruptions.
+#
+# Labels: 1000 classes (same as ImageNet-1K)
+# Scale: ~50,000 images per corruption type (750K total for all corruptions)
+# Domain: Natural images with synthetic corruptions
+#
+# Use Case: 
+#   - "Texture vs. Shape" bias testing (CNNs vs ViTs)
+#   - Edge model (CNN) excels on texture-preserved corruptions
+#   - Cloud model (ViT) struggles when global shape is distorted
+#
+# Download Instructions:
+#   1. Download from: https://zenodo.org/records/2235448
+#   2. Extract to: ./data/ImageNet-C/
+#   3. Structure: ./data/ImageNet-C/<corruption_type>/<severity>/<class>/<images>
+#      Example: ./data/ImageNet-C/gaussian_noise/1/n01440764/...
+#
+# Corruption Types:
+#   - Noise: gaussian_noise, shot_noise, impulse_noise
+#   - Blur: defocus_blur, glass_blur, motion_blur, zoom_blur
+#   - Weather: snow, frost, fog, brightness
+#   - Digital: contrast, elastic_transform, pixelate, jpeg_compression
+#
+# Auto-download: Yes (per-category tarballs from Zenodo, ~7-23GB each)
+# =============================================================================
+
+name: imagenet_c
+root: ./data/ImageNet-C
+split: val
+download: true
+
+# Corruption settings (specific to ImageNet-C)
+corruption_type: gaussian_noise  # one of the 15 types listed above
+severity: 3  # 1 (mild) to 5 (severe)

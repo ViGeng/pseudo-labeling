@@ -1,3 +1,14 @@
+# =============================================================================
+# Fashion-MNIST
+# =============================================================================
+# Brief: Drop-in replacement for MNIST with fashion items. More challenging baseline.
+#
+# Labels: 10 classes (t-shirt, trouser, pullover, dress, coat, sandal, shirt, sneaker, bag, ankle boot)
+# Scale: 70,000 images (60K train + 10K test)
+# Domain: Grayscale fashion items (28x28)
+# Download: Auto-download via torchvision
+# =============================================================================
+
 name: fashion_mnist
 root: ./data
 split: val

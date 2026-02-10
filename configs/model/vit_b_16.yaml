@@ -1,0 +1,38 @@
+# =============================================================================
+# Vision Transformer (ViT-B/16)
+# =============================================================================
+# Brief: Base Vision Transformer with 16x16 patch size. Pioneering transformer
+#        architecture for vision that processes images as sequences of patches.
+#        Strong global reasoning, shape-biased rather than texture-biased.
+#
+# Architecture:
+#   - Patch size: 16x16
+#   - Hidden dim: 768
+#   - Layers: 12 transformer blocks
+#   - Heads: 12 attention heads
+#   - Parameters: ~86M
+#
+# Input: 224x224 RGB images (resized internally if needed)
+# Output: 1000 classes (ImageNet-1K)
+#
+# Bias Profile: Shape-biased
+#   - Relies on global geometric structure
+#   - More robust to texture perturbations
+#   - Struggles when shape is distorted but texture preserved
+#
+# Use Case (Cloud Model):
+#   - "Texture vs. Shape" experiments (paired with CNN Edge models)
+#   - Global context understanding
+#   - Fails on high-noise/texture-only images where CNNs succeed
+#
+# Weights: torchvision.models.ViT_B_16_Weights.IMAGENET1K_V1
+# =============================================================================
+
+name: vit_b_16
+weights: DEFAULT
+source_dataset: imagenet1k
+source: torchvision
+
+# Model category for experiment selection
+role: cloud  # typically used as cloud model
+bias_type: shape  # shape-biased architecture

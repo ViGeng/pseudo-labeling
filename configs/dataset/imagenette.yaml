@@ -1,3 +1,14 @@
+# =============================================================================
+# Imagenette
+# =============================================================================
+# Brief: Fast ImageNet subset with 10 easily distinguishable classes for prototyping.
+#
+# Labels: 10 classes (tench, springer, cassette player, chain saw, church, French horn, garbage truck, gas pump, golf ball, parachute)
+# Scale: ~13,400 images (~9,500 train + ~3,900 val)
+# Domain: Natural images (resized to 224x224)
+# Download: Auto-download via torchvision
+# =============================================================================
+
 name: imagenette
 root: ./data
 split: val

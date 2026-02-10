@@ -12,20 +12,17 @@ hydra:
   output_subdir: null # Disable .hydra logging to keep it clean
 
 # Experiment settings
-batch_size: 512
+batch_size: 256
 num_workers: 8
 device: "cuda"
 
 # Pair-wise execution configuration
 pairs:
-  - dataset: cifar10
-    model: resnet18
-    split: val
-  - dataset: cifar100
-    model: resnet18
-    split: val
-  - dataset: imagenette
+  - dataset: imagenet_streaming
     model: mobilenet_v3_large
+    split: val
+  - dataset: imagenet_streaming
+    model: swin_t
     split: val
 
 # Shared defaults can be overridden in pairs if needed, but here are the common settings.

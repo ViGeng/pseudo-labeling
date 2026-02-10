@@ -1,3 +1,14 @@
+# =============================================================================
+# CIFAR-100
+# =============================================================================
+# Brief: Fine-grained version of CIFAR-10 with 100 classes grouped into 20 superclasses.
+#
+# Labels: 100 fine classes (20 superclasses x 5 fine classes each)
+# Scale: 60,000 images (50K train + 10K test)
+# Domain: Tiny natural images (32x32 RGB)
+# Download: Auto-download via torchvision
+# =============================================================================
+
 name: cifar100
 root: ./data
 split: val

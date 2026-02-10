@@ -1,0 +1,41 @@
+# =============================================================================
+# DenseNet-121
+# =============================================================================
+# Brief: Densely Connected CNN where each layer receives features from all
+#        preceding layers. Promotes feature reuse and reduces vanishing
+#        gradients. Good capacity-to-parameter ratio.
+#
+# Architecture:
+#   - Dense blocks with dense connections
+#   - Growth rate: k=32
+#   - Transition layers with compression
+#   - 121 layers depth
+#   - Parameters: ~8M
+#
+# Input: 224x224 RGB images
+# Output: 1000 classes (ImageNet-1K)
+#
+# Bias Profile: Texture-biased (CNN)
+#   - Deep convolutional architecture
+#   - Feature reuse provides strong representations
+#   - Standard training makes it corruption-vulnerable
+#
+# Use Case (Cloud Model):
+#   - "Robustness Trap" (AugMix) experiments
+#   - Cloud baseline with standard training
+#   - Vulnerable to corruptions despite depth
+#   - Smaller robust Edge model can outperform on corrupted data
+#
+# Weights: torchvision.models.DenseNet121_Weights.IMAGENET1K_V1
+# =============================================================================
+
+name: densenet121
+weights: DEFAULT
+source_dataset: imagenet1k
+source: torchvision
+
+# Model category
+role: cloud  # used as cloud baseline in robustness experiments
+bias_type: texture
+parameters: 8M
+standard_training: true  # not robust-trained, vulnerable to corruptions

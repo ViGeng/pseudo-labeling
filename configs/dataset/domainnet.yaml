@@ -1,0 +1,42 @@
+# =============================================================================
+# DomainNet Dataset
+# =============================================================================
+# Brief: Large-scale domain adaptation benchmark with 6 distinct visual domains.
+#        One of the largest domain adaptation datasets with ~0.6M images.
+#
+# Labels: 345 classes (common objects across all domains)
+# Scale: ~600,000 images total (varies by domain: 50K-175K each)
+# Domains: clipart, infograph, painting, quickdraw, real, sketch
+#
+# Use Case:
+#   - "Specialist vs. Generalist" gap testing (large scale)
+#   - Edge model fine-tuned on one domain vs Cloud model zero-shot
+#   - Studies extreme domain shifts (e.g., quickdraw sketches vs real photos)
+#
+# Download Instructions:
+#   1. Download from: http://ai.bu.edu/M3SDA/
+#      Contains train/test splits for each domain
+#   2. Extract to: ./data/domainnet/
+#   3. Structure: ./data/domainnet/<domain>/<class>/<images>
+#      Example: ./data/domainnet/real/airplane/real_001_000001.jpg
+#
+# Domain Descriptions:
+#   - clipart: Clipart images (~50K), stylized graphics
+#   - infograph: Infographic images (~50K), with text annotations
+#   - painting: Painting images (~70K), artistic style
+#   - quickdraw: Quick Draw doodles (~175K), hand-drawn sketches
+#   - real: Real photos (~175K), natural photographs
+#   - sketch: Pencil sketches (~70K), hand-drawn outlines
+#
+# Note: ~25GB total disk space required (only selected domain is downloaded)
+#
+# Auto-download: Yes (per-domain zips from BU, ~0.4-5.6GB each)
+# =============================================================================
+
+name: domainnet
+root: ./data/domainnet
+split: test
+download: true
+
+# Domain selection (choose one)
+domain: real  # clipart, infograph, painting, quickdraw, real, sketch

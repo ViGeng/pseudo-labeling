@@ -1,0 +1,36 @@
+# =============================================================================
+# Stylized-ImageNet (SIN)
+# =============================================================================
+# Brief: ImageNet images with style transfer applied using AdaIN, creating
+#        texture-shape conflict. Original texture is replaced with random
+#        painting textures while preserving global shape structure.
+#
+# Labels: 1000 classes (same as ImageNet-1K)
+# Scale: ~1.2M images (full ImageNet training set stylized)
+# Domain: Natural images with artistic style transfer
+#
+# Use Case:
+#   - "Texture vs. Shape" bias testing
+#   - CNNs (texture-biased) fail on stylized images where texture is misleading
+#   - ViTs (shape-biased) maintain accuracy due to global shape preservation
+#   - Reveals model reliance on texture shortcuts
+#
+# Download Instructions:
+#   1. Download from: https://github.com/rgeirhos/Stylized-ImageNet
+#      or direct link: https://bethgelab.org/datasets/
+#   2. Extract to: ./data/stylized-imagenet/
+#   3. Structure: ./data/stylized-imagenet/<split>/<class>/<images>
+#      Example: ./data/stylized-imagenet/train/n01440764/...
+#
+# Note: Must be GENERATED from ImageNet + style images using their code.
+#       Cannot be directly downloaded. See repo for instructions.
+#       A 16-class subset is available at:
+#       https://github.com/bethgelab/model-vs-human/releases/tag/v0.1
+#
+# Auto-download: No (must be generated)
+# =============================================================================
+
+name: stylized_imagenet
+root: ./data/stylized-imagenet
+split: val
+download: false

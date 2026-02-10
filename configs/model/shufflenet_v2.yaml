@@ -1,0 +1,40 @@
+# =============================================================================
+# ShuffleNet V2
+# =============================================================================
+# Brief: Lightweight CNN optimized for real-world efficiency. Uses channel
+#        shuffle operations for cross-group information flow. Designed
+#        for practical mobile deployment with strong accuracy.
+#
+# Architecture:
+#   - ShuffleNet V2 units with channel shuffle
+#   - Depthwise separable convolutions
+#   - Width multiplier: 1.0x
+#   - Parameters: ~2.3M
+#   - FLOPs: ~0.15B
+#
+# Input: 224x224 RGB images
+# Output: 1000 classes (ImageNet-1K)
+#
+# Bias Profile: Texture-biased (CNN)
+#   - Lightweight convolutional architecture
+#   - Can be made robust via AugMix training
+#   - Efficient for edge device deployment
+#
+# Use Case (Edge Model):
+#   - "Robustness Trap" (AugMix) experiments
+#   - Train with AugMix for corruption robustness
+#   - Beats larger non-robust models on corrupted data
+#
+# Weights: torchvision.models.ShuffleNet_V2_X1_0_Weights.IMAGENET1K_V1
+# =============================================================================
+
+name: shufflenet_v2
+weights: DEFAULT
+source_dataset: imagenet1k
+source: torchvision
+
+# Model category
+role: edge
+bias_type: texture
+parameters: 2.3M
+robust_training_compatible: true  # good candidate for AugMix training

@@ -1,0 +1,40 @@
+# =============================================================================
+# CIFAR-100-C (Corrupted CIFAR-100)
+# =============================================================================
+# Brief: CIFAR-100 test set with 19 types of corruption at 5 severity levels.
+#        Smaller-scale robustness benchmark compared to ImageNet-C.
+#
+# Labels: 100 classes (same as CIFAR-100: 20 superclasses, 5 fine per super)
+# Scale: ~10,000 images per corruption type (190K total)
+# Domain: Small natural images (32x32) with synthetic corruptions
+#
+# Use Case:
+#   - "Robustness Trap" (AugMix) testing
+#   - Edge model (AugMix-trained) resists corruptions
+#   - Cloud model (standard-trained) is brittle to distribution shift
+#   - Fast experimentation due to small image size
+#
+# Download Instructions:
+#   1. Download from: https://zenodo.org/records/3555552
+#      or via robustness benchmarks: https://github.com/hendrycks/robustness
+#   2. Extract to: ./data/CIFAR-100-C/
+#   3. Files: ./data/CIFAR-100-C/<corruption_type>.npy
+#      and ./data/CIFAR-100-C/labels.npy
+#
+# Corruption Types (19):
+#   - Noise: gaussian_noise, shot_noise, impulse_noise, speckle_noise
+#   - Blur: defocus_blur, glass_blur, motion_blur, zoom_blur, gaussian_blur
+#   - Weather: snow, frost, fog, brightness, spatter
+#   - Digital: contrast, elastic_transform, pixelate, jpeg_compression, saturate
+#
+# Auto-download: Yes (Zenodo, ~2.9GB)
+# =============================================================================
+
+name: cifar100_c
+root: ./data/CIFAR-100-C
+split: test
+download: true
+
+# Corruption settings
+corruption_type: gaussian_noise
+severity: 3  # 1-5

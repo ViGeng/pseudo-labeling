@@ -1,3 +1,15 @@
+# =============================================================================
+# ResNet-18
+# =============================================================================
+# Brief: Classic residual network with 18 layers. Lightweight but effective
+#        baseline for many vision tasks.
+#
+# Parameters: ~11.7M
+# Bias: Texture-biased (CNN)
+# Role: Edge model (default baseline)
+# =============================================================================
+
 name: resnet18
-weights: DEFAULT # Torchvision weights enum
+weights: DEFAULT
 source_dataset: imagenet1k
+source: torchvision

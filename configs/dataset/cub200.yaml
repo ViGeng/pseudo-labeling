@@ -1,0 +1,35 @@
+# =============================================================================
+# CUB-200-2011 (Caltech-UCSD Birds 200)
+# =============================================================================
+# Brief: Fine-grained bird species classification dataset. Contains images
+#        of 200 bird species with detailed part annotations and attributes.
+#        One of the most challenging fine-grained benchmarks.
+#
+# Labels: 200 classes (bird species, e.g., "Black_footed_Albatross")
+# Scale: ~11,788 images (5,994 train + 5,794 test)
+# Domain: Natural bird photographs in various poses and environments
+#
+# Use Case:
+#   - "Resolution & Crop" inversion testing
+#   - Edge model with zoomed crop captures beak texture, plumage patterns
+#   - Cloud model resizing loses subtle distinguishing features
+#   - Classic fine-grained recognition benchmark
+#
+# Download Instructions:
+#   1. Download from: https://www.vision.caltech.edu/datasets/cub_200_2011/
+#      Direct: https://data.caltech.edu/records/65de6-vp158
+#   2. Download: CUB_200_2011.tgz
+#   3. Extract to: ./data/CUB_200_2011/
+#   4. Structure: ./data/CUB_200_2011/images/<class_folder>/<images>
+#      Example: ./data/CUB_200_2011/images/001.Black_footed_Albatross/...
+#
+# Alternative: Use Kaggle mirror for easier download
+#              https://www.kaggle.com/datasets/wenewone/cub2002011
+#
+# Auto-download: Yes (CaltechDATA, ~1.2GB)
+# =============================================================================
+
+name: cub200
+root: ./data/CUB_200_2011
+split: test
+download: true

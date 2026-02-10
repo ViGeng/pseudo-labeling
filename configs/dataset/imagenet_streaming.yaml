@@ -1,0 +1,5 @@
+# @package _global_
+dataset_name: imagenet_streaming
+download: false  # Not used for streaming, but good explicit default
+streaming: true
+split: val

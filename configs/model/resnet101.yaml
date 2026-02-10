@@ -1,0 +1,40 @@
+# =============================================================================
+# ResNet-101
+# =============================================================================
+# Brief: Deep Residual Network with 101 layers. Standard backbone for many
+#        vision tasks. Larger capacity than ResNet-18/50, commonly used
+#        as a strong baseline in research.
+#
+# Architecture:
+#   - Residual blocks with skip connections
+#   - 101 layers (3-4-23-3 block configuration)
+#   - Parameters: ~44.5M
+#   - FLOPs: ~7.8B
+#
+# Input: 224x224 RGB images
+# Output: 1000 classes (ImageNet-1K)
+#
+# Bias Profile: Texture-biased (CNN)
+#   - Deep convolutional architecture
+#   - Relies on local texture patterns
+#   - Strong when seeing full context, weak on cropped details
+#
+# Use Case (Cloud Model):
+#   - "Resolution & Crop" experiments (full image resized)
+#   - Cloud model processing full image at lower fidelity
+#   - Sees context but loses fine-grained details
+#   - Edge model with high-res crop can outperform on detail-dependent classes
+#
+# Weights: torchvision.models.ResNet101_Weights.IMAGENET1K_V1
+# =============================================================================
+
+name: resnet101
+weights: DEFAULT
+source_dataset: imagenet1k
+source: torchvision
+
+# Model category
+role: cloud  # cloud model in resolution experiments
+bias_type: texture
+parameters: 44.5M
+input_strategy: full_image  # typically processes full resized image

@@ -1,0 +1,40 @@
+# =============================================================================
+# Swin Transformer Tiny
+# =============================================================================
+# Brief: Shifted Window Transformer with hierarchical feature maps.
+#        Uses local window attention with cross-window connections via
+#        shifted partitioning. Bridges CNN locality with transformer power.
+#
+# Architecture:
+#   - Patch size: 4x4
+#   - Window size: 7x7
+#   - Embed dim: 96
+#   - Layers: [2, 2, 6, 2] (4 stages)
+#   - Heads: [3, 6, 12, 24]
+#   - Parameters: ~28M
+#
+# Input: 224x224 RGB images
+# Output: 1000 classes (ImageNet-1K)
+#
+# Bias Profile: Hybrid (local + global)
+#   - Local window attention captures texture-like features
+#   - Shifted windows enable cross-region information flow
+#   - More shape-aware than CNNs, more texture-aware than pure ViTs
+#
+# Use Case (Cloud / Edge):
+#   - Interesting middle ground between CNN and ViT biases
+#   - Can serve as cloud model in texture/shape experiments
+#   - Compact enough to also serve as a strong edge model
+#
+# Weights: torchvision.models.Swin_T_Weights.IMAGENET1K_V1
+# =============================================================================
+
+name: swin_t
+weights: DEFAULT
+source_dataset: imagenet1k
+source: torchvision
+
+# Model category
+role: cloud
+bias_type: hybrid  # local window attention + shifted cross-window
+parameters: 28M

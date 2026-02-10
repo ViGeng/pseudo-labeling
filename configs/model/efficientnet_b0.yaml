@@ -1,0 +1,39 @@
+# =============================================================================
+# EfficientNet-B0
+# =============================================================================
+# Brief: Efficient CNN architecture using compound scaling. B0 is the base
+#        model optimized for mobile/edge deployment. Excellent accuracy
+#        per FLOP ratio through neural architecture search (NAS).
+#
+# Architecture:
+#   - MBConv blocks (Mobile Inverted Bottleneck)
+#   - Squeeze-and-Excitation attention
+#   - Swish activation
+#   - Parameters: ~5.3M
+#   - FLOPs: ~0.39B
+#
+# Input: 224x224 RGB images
+# Output: 1000 classes (ImageNet-1K)
+#
+# Bias Profile: Texture-biased (CNN)
+#   - Convolutional architecture favors local patterns
+#   - Efficient but limited global reasoning
+#   - Strong when fine-tuned on target domain
+#
+# Use Case (Edge Model):
+#   - "Specialist vs. Generalist" experiments
+#   - Fine-tune on specific domain to beat larger zero-shot models
+#   - Fast inference for edge deployment
+#
+# Weights: torchvision.models.EfficientNet_B0_Weights.IMAGENET1K_V1
+# =============================================================================
+
+name: efficientnet_b0
+weights: DEFAULT
+source_dataset: imagenet1k
+source: torchvision
+
+# Model category
+role: edge
+bias_type: texture  # CNN texture-biased
+parameters: 5.3M

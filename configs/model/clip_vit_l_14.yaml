@@ -1,0 +1,42 @@
+# =============================================================================
+# CLIP (ViT-L/14 Vision Encoder)
+# =============================================================================
+# Brief: Contrastive Language-Image Pre-training model from OpenAI.
+#        Trained on 400M image-text pairs. Exceptional zero-shot capability.
+#        Vision encoder based on Large Vision Transformer.
+#
+# Architecture:
+#   - Vision: ViT-L/14 (Large, 14x14 patches)
+#   - Hidden dim: 1024
+#   - Layers: 24 transformer blocks
+#   - Heads: 16 attention heads
+#   - Parameters: ~428M (vision encoder only)
+#
+# Input: 224x224 RGB images
+# Output: Feature embeddings (classification via text similarity)
+#
+# Bias Profile: General-purpose
+#   - Trained on diverse web data
+#   - Excellent zero-shot generalization
+#   - May lack domain-specific fine details
+#
+# Use Case (Cloud Model):
+#   - "Specialist vs. Generalist" experiments
+#   - Zero-shot classification baseline
+#   - Struggles on domain-specific styles (e.g., clipart, sketches)
+#
+# Note: Requires 'open_clip' or 'clip' package for loading
+#       For classification: uses text prompts like "a photo of a {class}"
+#
+# Weights: openai/clip-vit-large-patch14 (via open_clip/transformers)
+# =============================================================================
+
+name: clip_vit_l_14
+weights: openai
+source_dataset: web_400m
+source: open_clip
+
+# Model category
+role: cloud
+bias_type: general  # web-trained generalist
+zero_shot: true  # supports zero-shot classification
