@@ -1,4 +1,5 @@
 data/
 outputs/
 *.pyc
-*.log
+*.logfeatures/imagenet_val_pre_inference.npz
+features/imagenet_val_pre_inference.npz
