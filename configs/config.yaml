@@ -20,10 +20,10 @@ device: "cuda"
 pairs:
   - dataset: imagenet_streaming
     model: mobilenet_v3_large
-    split: val
+    split: test
   - dataset: imagenet_streaming
     model: swin_t
-    split: val
+    split: test
 
 # Shared defaults can be overridden in pairs if needed, but here are the common settings.
 dataset_root: "./data"
