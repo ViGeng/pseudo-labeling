@@ -3,10 +3,9 @@ import os
 import sys
 import torch
 
-# Add project root to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
-from src.datasets.wrappers import ImageNetWrapper
+
+from pseudo_labeling.datasets.wrappers import ImageNetWrapper
 
 def main():
     print("=== ImageNet Wrapper Usage Example ===\n")
@@ -68,7 +67,7 @@ def main():
     print("Requirement: 'datasets' library installed (pip install datasets).")
     
     try:
-        from src.datasets.wrappers import StreamingImageNetWrapper
+        from pseudo_labeling.datasets.wrappers import StreamingImageNetWrapper
         
         # Using 'imagenet-1k' as requested.
         # Note: This requires huggingface-cli login and accepting terms.

@@ -7,8 +7,7 @@ import torch
 from PIL import Image
 import numpy as np
 
-# Ensure src is in path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+
 
 from pseudo_labeling.datasets.wrappers import (
     CIFAR10Wrapper, CIFAR100Wrapper, FashionMNISTWrapper, ImagenetteWrapper, 
