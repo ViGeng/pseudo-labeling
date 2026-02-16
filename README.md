@@ -18,6 +18,47 @@ Run the main script. By default, it runs `resnet18` on `cifar10` (or whatever de
 python main.py
 ```
 
+### 3. Verify Setup & Usage
+Run the included example script to understand how to interact with the dataset wrappers and verify your environment.
+```bash
+python src/test/example_usage.py
+```
+
+## Features
+
+- **Batch Inference**: Efficiently run pytorch models on standard datasets.
+- **Streaming Data**: Support for streaming huge datasets (e.g., ImageNet-1k) from Hugging Face without downloading.
+- **Label Mapping**: Auto-map predictions between different label spaces (e.g., ImageNet -> CIFAR10).
+
+## Project Structure
+
+```text
+├── configs/            # Hydra configs
+├── src/
+│   ├── datasets/       # Dataset wrappers (standard & streaming)
+│   ├── models/         # Model definitions
+│   ├── inference/      # Inference engine
+│   ├── test/           # Tests and verification scripts
+├── main.py             # Entry point
+└── requirements.txt
+```
+
+## Testing & Verification
+
+The project includes a `src/test` directory with unit tests and examples.
+
+**Run Unit Tests:**
+```bash
+python src/test/test_wrappers.py
+```
+*Tests all wrappers including streaming and reliability edge cases.*
+
+**Run Usage Example:**
+```bash
+python src/test/example_usage.py
+```
+*Demonstrates how to initialize wrappers (both local and streaming) and access data.*
+
 ## Output
 
 Results are saved to the `outputs/` directory by default.

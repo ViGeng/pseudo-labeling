@@ -14,6 +14,7 @@ To systematically evaluate performance discrepancies between different pre-train
 -   **Config-Driven**: Use Hydra/YAML for reproducible experiment configurations (Model A vs. B on Dataset X).
 -   **Batch Inference**: High-throughput GPU prediction pipeline with progress tracking.
 -   **Incremental Output**: model-dataset-wise prediction results saved to CSV for easy inspection. this provides a suplementary model-specific predicton on dataset images.
+-   **Streaming Support**: Ability to stream large datasets (like ImageNet) from Hugging Face without full download, facilitating quick testing and demos.
 
 ## 3. Data Integrity & Output Schema
 To ensure precise matching of inputs to model outputs, the system uses a strict CSV schema.
