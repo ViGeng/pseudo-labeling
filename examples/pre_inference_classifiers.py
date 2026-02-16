@@ -15,6 +15,9 @@ Classifiers:
   14. FinetunedSqueezeNet   - End-to-end fine-tuned SqueezeNet 1.1
   15. FinetunedMobileNetV2 - End-to-end fine-tuned MobileNetV2
   16. SimpleCNN             - Custom efficient 3-layer CNN
+  17. ImageStatsRF          - Hand-crafted image stats -> Random Forest
+  18. FrozenBackboneKNN     - Frozen SqueezeNet features -> k-NN
+  19. FinetunedEfficientNetB0 - End-to-end fine-tuned EfficientNet-B0
 """
 
 import numpy as np
@@ -23,8 +26,9 @@ import torch.nn as nn
 import torchvision.models as models
 from classifiers import (BaseClassifier, _compute_class_weights,
                          _predict_torch, _train_torch_model)
-from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import f1_score
 from torch.utils.data import DataLoader, TensorDataset
 
@@ -126,6 +130,47 @@ class ImageStatsGBClassifier(BaseClassifier):
 
 
 # =============================================================================
+# 17. Image Statistics -> Random Forest
+# =============================================================================
+
+class ImageStatsRFClassifier(BaseClassifier):
+    """Hand-crafted image statistics -> Random Forest."""
+    name = "ImageStatsRF"
+    requires_image_stats = True
+
+    def __init__(self, num_classes=2):
+        self.nc = num_classes
+        self.model = RandomForestClassifier(
+            n_estimators=200, max_depth=10, n_jobs=-1
+        )
+
+    def fit(self, data, y):
+        X = data['image_stats']
+        # RF handles class weights internally
+        self.model.fit(X, y) # sample_weight not strictly needed if balanced? actually RF has class_weight='balanced'
+
+    def get_model_size_mb(self):
+        import pickle
+        if not hasattr(self.model, 'estimators_'): return 0.0
+        return len(pickle.dumps(self.model)) / (1024 * 1024)
+
+    def get_param_count(self):
+        if not hasattr(self.model, 'estimators_'): return 0
+        return sum(tree.tree_.node_count for tree in self.model.estimators_)
+
+    def get_gflops(self):
+        if not hasattr(self.model, 'estimators_'): return 0.0
+        # Average depth * n_estimators
+        return (self.model.n_estimators * 10) / 1e9 # approx max_depth
+
+    def predict(self, data):
+        return self.model.predict(data['image_stats'])
+
+    def predict_proba(self, data):
+        return self.model.predict_proba(data['image_stats'])
+
+
+# =============================================================================
 # 8. Frozen SqueezeNet → Logistic Regression
 # =============================================================================
 
@@ -154,6 +199,42 @@ class FrozenBackboneLRClassifier(BaseClassifier):
     def get_gflops(self):
         if not hasattr(self.model, 'coef_'): return 0.0
         return (self.model.coef_.size * 2) / 1e9
+
+    def predict(self, data):
+        return self.model.predict(data['backbone_features'])
+
+    def predict_proba(self, data):
+        return self.model.predict_proba(data['backbone_features'])
+
+
+# =============================================================================
+# 18. Frozen SqueezeNet -> k-Nearest Neighbors
+# =============================================================================
+
+class FrozenBackboneKNNClassifier(BaseClassifier):
+    """Frozen SqueezeNet features -> k-NN."""
+    name = "FrozenBackboneKNN"
+    requires_backbone_features = True
+
+    def __init__(self, num_classes=2):
+        self.model = KNeighborsClassifier(n_neighbors=5, n_jobs=-1)
+
+    def fit(self, data, y):
+        self.model.fit(data['backbone_features'], y)
+
+    def get_model_size_mb(self):
+        # KNN stores training data: n_samples * n_features * 4 bytes
+        if not hasattr(self.model, '_fit_X'): return 0.0
+        return (self.model._fit_X.size * 4) / (1024 * 1024)
+
+    def get_param_count(self):
+        return 0 # Non-parametric
+
+    def get_gflops(self):
+        # Distance calculation per sample: n_train * n_features
+        if not hasattr(self.model, '_fit_X'): return 0.0
+        n_train, n_feat = self.model._fit_X.shape
+        return (n_train * n_feat) / 1e9
 
     def predict(self, data):
         return self.model.predict(data['backbone_features'])
@@ -495,3 +576,23 @@ class SimpleCNNClassifier(_BaseFinetunedClassifier):
 
     def _build_model(self):
         return SimpleCNNNet(self.nc)
+
+
+# =============================================================================
+# 19. Finetuned EfficientNet-B0
+# =============================================================================
+
+class FinetunedEfficientNetB0Classifier(_BaseFinetunedClassifier):
+    name = "FinetunedEfficientNetB0"
+
+    def _build_model(self):
+        base = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.DEFAULT)
+        # Freeze features[:4] (first few blocks)
+        # EfficientNet features are in base.features
+        for param in base.features[:4].parameters():
+            param.requires_grad = False
+        
+        # Classifier is in base.classifier: Sequential(Dropout, Linear)
+        # In EfficientNet B0, last channel is 1280
+        base.classifier[1] = nn.Linear(1280, self.nc)
+        return base

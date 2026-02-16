@@ -53,10 +53,15 @@ from pre_inference_classifiers import (FinetunedMobileNetV2Classifier,
                                        FinetunedResNet18Classifier,
                                        FinetunedShuffleNetV2Classifier,
                                        FinetunedSqueezeNetClassifier,
+                                       FinetunedSqueezeNetClassifier,
+                                       FinetunedMobileNetV2Classifier,
+                                       FinetunedEfficientNetB0Classifier,
                                        FrozenBackboneLRClassifier,
                                        FrozenBackboneMLPClassifier,
+                                       FrozenBackboneKNNClassifier,
                                        HybridStatsBackboneClassifier,
                                        ImageStatsGBClassifier,
+                                       ImageStatsRFClassifier,
                                        SimpleCNNClassifier)
 
 
@@ -157,30 +162,56 @@ def measure_latency(clf, data, n_warmup=5, n_runs=20, device='cuda'):
 
 def run_experiment(edge_csv, cloud_csv, post_features_file=None,
                    pre_features_file=None, extract_images=False,
-                   max_images=None, test_size=0.2, seed=42):
+                   max_images=None, test_size=0.2, seed=42, mock_data=False):
     # ---- Load & prepare data ------------------------------------------------
     print("=" * 60)
     print("  Loading Data")
     print("=" * 60)
-    df = load_disagreement_data(edge_csv, cloud_csv)
-    if max_images:
-        print(f"Subsampling dataframe to {max_images} samples for quick testing.")
-        df = df.iloc[:max_images]
-    n_samples = len(df)
-    print(f"Total merged samples: {n_samples}")
-
-    # Post-inference features (edge model outputs)
-    data = prepare_data(df, post_features_file)
-
-    # Pre-inference features (raw image)
-    if pre_features_file:
-        pre_data = load_pre_inference_features(pre_features_file, n_samples)
-        data.update(pre_data)
-
-    # Raw images for end-to-end fine-tuning
-    if extract_images:
-        data['images'] = load_images_from_stream(n_samples, max_images)
-        print(f"Loaded image tensors: {data['images'].shape}")
+    
+    if mock_data:
+        print("WARNING: Using MOCK data for verification.")
+        # Create dummy dataframe
+        n = max_images or 100
+        df = pd.DataFrame({
+            'label_2cls': np.random.randint(0, 2, n),
+            'label_4cls': np.random.randint(0, 4, n),
+            'confidence': np.random.rand(n),
+            'pred_class': np.random.randint(0, 1000, n),
+        })
+        n_samples = len(df)
+        data = {
+            'metadata': np.random.rand(n, 4).astype(np.float32),
+            'pred_class': df['pred_class'].values,
+        }
+        if post_features_file or mock_data:
+            data['features'] = np.random.rand(n, 960).astype(np.float32)
+        if pre_features_file or mock_data:
+            data['image_stats'] = np.random.rand(n, 12).astype(np.float32)
+            data['backbone_features'] = np.random.rand(n, 512).astype(np.float32)
+        if extract_images or mock_data:
+            data['images'] = np.random.rand(n, 3, 224, 224).astype(np.float32)
+            print(f"Loaded mock images: {data['images'].shape}")
+            
+    else:    
+        df = load_disagreement_data(edge_csv, cloud_csv)
+        if max_images:
+            print(f"Subsampling dataframe to {max_images} samples for quick testing.")
+            df = df.iloc[:max_images]
+        n_samples = len(df)
+        print(f"Total merged samples: {n_samples}")
+    
+        # Post-inference features (edge model outputs)
+        data = prepare_data(df, post_features_file)
+    
+        # Pre-inference features (raw image)
+        if pre_features_file:
+            pre_data = load_pre_inference_features(pre_features_file, n_samples)
+            data.update(pre_data)
+    
+        # Raw images for end-to-end fine-tuning
+        if extract_images:
+            data['images'] = load_images_from_stream(n_samples, max_images)
+            print(f"Loaded image tensors: {data['images'].shape}")
 
     # ---- Train/Test split ---------------------------------------------------
     indices = np.arange(n_samples)
@@ -236,14 +267,17 @@ def run_experiment(edge_csv, cloud_csv, post_features_file=None,
         # ---- Pre-inference classifiers (7-11) ----
         pre_clfs = [
             ImageStatsGBClassifier(num_classes),
+            ImageStatsRFClassifier(num_classes),
             FrozenBackboneLRClassifier(num_classes),
             FrozenBackboneMLPClassifier(num_classes),
+            FrozenBackboneKNNClassifier(num_classes),
             HybridStatsBackboneClassifier(num_classes),
             FinetunedResNet18Classifier(num_classes),
             FinetunedMobileNetV3SmallClassifier(num_classes),
             FinetunedShuffleNetV2Classifier(num_classes),
             FinetunedSqueezeNetClassifier(num_classes),
             FinetunedMobileNetV2Classifier(num_classes),
+            FinetunedEfficientNetB0Classifier(num_classes),
             SimpleCNNClassifier(num_classes),
         ]
 
@@ -427,6 +461,8 @@ if __name__ == '__main__':
                         help='Max images to load (for quick test)')
     parser.add_argument('--test-size', type=float, default=0.2)
     parser.add_argument('--seed', type=int, default=42)
+    parser.add_argument('--mock-data', action='store_true',
+                        help='Use synthetic data for testing pipeline')
     args = parser.parse_args()
 
     run_experiment(
@@ -437,4 +473,5 @@ if __name__ == '__main__':
         max_images=args.max_images,
         test_size=args.test_size,
         seed=args.seed,
+        mock_data=args.mock_data,
     )
