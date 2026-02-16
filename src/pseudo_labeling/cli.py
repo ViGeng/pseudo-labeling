@@ -6,13 +6,13 @@ import torch
 from omegaconf import DictConfig, OmegaConf
 from torch.utils.data import DataLoader
 
-from src.datasets.wrappers import (  # New wrappers for classification prototyping experiments
+from pseudo_labeling.datasets.wrappers import (  # New wrappers for classification prototyping experiments
     CIFAR10Wrapper, CIFAR100CWrapper, CIFAR100Wrapper, CUB200Wrapper,
     DomainNetWrapper, FashionMNISTWrapper, ImageNetCWrapper, ImagenetteWrapper,
     ImageNetWrapper, OfficeHomeWrapper, StanfordCarsWrapper, StreamingImageNetWrapper,
     StylizedImageNetWrapper, TinyImageNetCWrapper, TinyImageNetWrapper)
-from src.inference.runner import InferenceRunner
-from src.models.loader import load_model
+from pseudo_labeling.inference.runner import InferenceRunner
+from pseudo_labeling.models.loader import load_model
 
 
 @hydra.main(version_base=None, config_path="configs", config_name="config")
@@ -45,7 +45,9 @@ def main(cfg: DictConfig):
         print(f"Loading Dataset: {ds_name} | Split: {split}")
         
         # Load dataset-specific config
-        ds_cfg_path = os.path.join(hydra.utils.get_original_cwd(), "configs", "dataset", f"{ds_name}.yaml")
+        # Use package-relative path for configs
+        base_config_path = os.path.join(os.path.dirname(__file__), "configs")
+        ds_cfg_path = os.path.join(base_config_path, "dataset", f"{ds_name}.yaml")
         if os.path.exists(ds_cfg_path):
             ds_cfg = OmegaConf.load(ds_cfg_path)
             download = ds_cfg.get("download", False)
@@ -150,7 +152,7 @@ def main(cfg: DictConfig):
         if model_name == "mobilenet_v3_large":
             fname = "mobilenet_v3"
             
-        model_cfg_path = os.path.join(hydra.utils.get_original_cwd(), "configs", "model", f"{fname}.yaml")
+        model_cfg_path = os.path.join(base_config_path, "model", f"{fname}.yaml")
         
         if os.path.exists(model_cfg_path):
             model_cfg = OmegaConf.load(model_cfg_path)
@@ -173,11 +175,11 @@ def main(cfg: DictConfig):
         if model_source != target_dataset:
             # Construct potential mapping file path: configs/mappings/{source}_to_{target}.json
             mapping_filename = f"{model_source}_to_{target_dataset}.json"
-            mapping_path = os.path.join(hydra.utils.get_original_cwd(), "configs", "mappings", mapping_filename)
+            mapping_path = os.path.join(base_config_path, "mappings", mapping_filename)
             
             if os.path.exists(mapping_path):
                 print(f"Loading label mapping: {mapping_filename}")
-                from src.utils.label_mapper import LabelMapper
+                from pseudo_labeling.utils.label_mapper import LabelMapper
                 label_mapper = LabelMapper(mapping_path)
             else:
                 print(f"[WARNING] No mapping found for {model_source} -> {target_dataset}. Predictions will remain in {model_source} label space.")

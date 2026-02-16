@@ -1,0 +1,17 @@
+torch
+torchvision
+hydra-core
+pandas
+tqdm
+pillow
+numpy
+matplotlib-venn
+
+[dev]
+pytest
+
+[extra]
+timm
+open_clip_torch
+datasets
+ipykernel

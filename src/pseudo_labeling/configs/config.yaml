@@ -10,6 +10,10 @@ hydra:
   run:
     dir: .  # Don't change CWD, so we can control output path manually
   output_subdir: null # Disable .hydra logging to keep it clean
+  help:
+    app_name: Pseudo-Labeling Tool
+    header: "${hydra.help.app_name}"
+    footer: "Powered by Pseudo-Labeling"
 
 # Experiment settings
 batch_size: 256

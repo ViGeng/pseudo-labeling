@@ -1,0 +1,2 @@
+[console_scripts]
+pseudo-label = pseudo_labeling.cli:main

@@ -10,7 +10,7 @@ import numpy as np
 # Ensure src is in path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
-from src.datasets.wrappers import (
+from pseudo_labeling.datasets.wrappers import (
     CIFAR10Wrapper, CIFAR100Wrapper, FashionMNISTWrapper, ImagenetteWrapper, 
     StanfordCarsWrapper, ImageNetWrapper, ImageNetCWrapper, StylizedImageNetWrapper,
     OfficeHomeWrapper, DomainNetWrapper, CUB200Wrapper, CIFAR100CWrapper,
@@ -36,12 +36,12 @@ class TestWrappers(unittest.TestCase):
         self.mock_tv_dataset.__getitem__.return_value = (Image.new('RGB', (32, 32)), 0)
         
         self.tv_patches = [
-            patch('src.datasets.wrappers.CIFAR10', return_value=self.mock_tv_dataset),
-            patch('src.datasets.wrappers.CIFAR100', return_value=self.mock_tv_dataset),
-            patch('src.datasets.wrappers.FashionMNIST', return_value=self.mock_tv_dataset),
-            patch('src.datasets.wrappers.StanfordCars', return_value=self.mock_tv_dataset),
-            patch('src.datasets.wrappers.Imagenette', return_value=self.mock_tv_dataset),
-            patch('src.datasets.wrappers.ImageFolder', return_value=self.mock_tv_dataset)
+            patch('pseudo_labeling.datasets.wrappers.CIFAR10', return_value=self.mock_tv_dataset),
+            patch('pseudo_labeling.datasets.wrappers.CIFAR100', return_value=self.mock_tv_dataset),
+            patch('pseudo_labeling.datasets.wrappers.FashionMNIST', return_value=self.mock_tv_dataset),
+            patch('pseudo_labeling.datasets.wrappers.StanfordCars', return_value=self.mock_tv_dataset),
+            patch('pseudo_labeling.datasets.wrappers.Imagenette', return_value=self.mock_tv_dataset),
+            patch('pseudo_labeling.datasets.wrappers.ImageFolder', return_value=self.mock_tv_dataset)
         ]
         for p in self.tv_patches:
             p.start()
@@ -96,7 +96,7 @@ class TestWrappers(unittest.TestCase):
         # Test generic download path falls back to HF
         # We assume local dir does not exist
         # We mock datasets.load_dataset
-        with patch('src.datasets.wrappers.os.path.exists', return_value=False):
+        with patch('pseudo_labeling.datasets.wrappers.os.path.exists', return_value=False):
              with patch.dict(sys.modules, {'datasets': MagicMock()}):
                 mock_hf = MagicMock()
                 mock_hf.filter.return_value = mock_hf

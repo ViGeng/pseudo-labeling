@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pseudo-labeling"
+version = "0.1.0"
+description = "A lightweight inference pipeline for pseudo-labeling and model prototyping."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "torch",
+    "torchvision",
+    "hydra-core",
+    "pandas",
+    "tqdm",
+    "pillow",
+    "numpy",
+    "matplotlib-venn",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+extra = [
+    "timm",
+    "open_clip_torch",
+    "datasets",
+    "ipykernel",
+]
+dev = [
+    "pytest",
+]
+
+[project.scripts]
+pseudo-label = "pseudo_labeling.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,2 @@
+include README.md
+recursive-include src/pseudo_labeling/configs *.yaml *.json
